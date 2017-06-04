@@ -9,12 +9,11 @@ Adopted version from
 |               |8-11 Keble Road                                |
 |               |Oxford OX1 3QD                                 |
 |               |England                                        |
-|               |                                               |
 |Tel            |+44-865-273840                                 |
-|               |                                               |
 |Created        |May 1983                                       |
-|Updated        |April 1985                                     |
-|Issue          |1.1                Copyright (C) J.P.Bowen 1985|
+|Updated        |April 1985, May 2017                           |
+|Issue          |1.2                                            |
+|Copyright (C)  | J.P. Bowen 1985, changes B. Fechner           |
 
 
 ## CPU register usage
@@ -46,7 +45,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |1D|	R5: serial bits received so far                        |
 |1E|	R6: SERx Buffer End                                    |
 |1F|	R7: temp storage for 'A'                               |
-|                                                              |
 |20|	IPCSTAT,  status                                           |
 |	|bit 0: keyboard interrupt                                  |
 |	|bit 1: sound on/off                                        |
@@ -56,7 +54,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |	|bit 5: SER2 open/close                                     |
 |	|(bit 6): for P2.6 in IPCOM.1 sa $229                       |
 |	|bit 7: ? $624, 642                                         |
-|  |                                                            |
 |21|	? 646                                                      |
 |22|	IOSTAT                                                     |
 |	|bit 0: CHANOVF: 0=SER1,  1=SER2 almost overflown           |
@@ -69,14 +66,11 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |	|bit 7: SER2 stopbit                                        |
 |23|	see $182                                                   |
 |24|	BAUDRATE: 1->19200baud,  FF->75baud,  init with #0x03 (=9600)              |
-|                                                                                  |
 |25, 26 	|RANDOM: current random value                                          |
 |27	|KBDSEED: kbd seed for random? sa 500, 5A7                                     |
-|                                                                                  |
 |28	|SCA: code of current SH/CTRL/ALT                                              |
 |29	|KEY: keycode of current key re-init as #0xFF,  $547                           |
 |2A	|KCC: key cycle count. 4 cycles before storage in KEYBUF init #0x00,  $54A, 55E|
-|                                                                                 | 
 |2B	|BUFPTR: ptr to current free key pos                                          |
 |2C..39|	KEYBUF: buffer of 7 keys,  2 bytes each: ovf/sh/ctl/alt(SCA) keycode  |
 |2C, 2D|	1                                                                     |
@@ -87,7 +81,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |36, 37|	6                                                                     |
 |38, 39|	7                                                                     |
 |38	|bit 3,  set at $5B0 to indicate buffer overflow new keys are ignored.         |
-|                                                                                 |
 |3A..41|	**8 byte IPCOM sound parameters**                                             |
 |3A	|pitch1                                                                       |
 |3B	|pitch2                                                                       |
@@ -95,7 +88,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |3E, 3F	|duration                                                                 |
 |40	|pitch/wrap                                                                   |
 |41	|random/fuzz                                                                  |
-|                                                                                 |
 |42|pitchx use 3A or 3B dep. on 40.b7                                             |
 |43| 44	id.                                                                       |
 |45|5*sound par?? (see $313)                                                      |
@@ -104,22 +96,20 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |48|                                                                              |
 |49|                                                                              |
 |4A|                                                                              |
-|                                                                                 |
 |4B	|CRPTR,  current SERxPTR $0C6,  $632                                          |
 |4C	|SER1NUM negative number of bytesdata #0xbytes? $05F, $237                    |
 |4D	|SER2NUM                                                                      |
-|                                                                                 |
 |4E	|SER1SPTR,  send to ZX8032 pointer,  init as #0x52                            |
 |4F	|SER1RPTR,  receive from serial line pointer,  init as #0x52                  |
 |50	|SER2SPTR,  send to ZX8032 pointer,  init as #0x69                            |
 |51	|SER2RPTR,  receive from serial line pointer,  init as #0x69                  |
-|                                                                                 |
 |52..68	|SER1BUF SER2 receive buffer. $17 (=23) bytes                             |
 |69..7F	|SER2BUF SER2 receive buffer                                              |
 
 
 ## 8049 Instruction Set Summary
 ~~~
+
 ----------------------------------------------------------------
 |                                                              |
 |                                                              |
@@ -189,21 +179,22 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |                                                              |
 ----------------------------------------------------------------
 ~~~
+##Instruction Set Reference
 
 |Mnemonic  |Op |CA |F  |~  |Description |Notes       |
-|:---------|:--|:--|:--|:--|:-----------|:-----------|  
+|:---------|:--|:--|:--|:--|:-----------|:-----------|
 |ADD  A, rr |68|**|A|1|Add register             |A=A+rr         |
 |ADD  A, @r |60|**|B|1|Add memory               |A=A+[r]        |
-|ADD  A, #0xn |03|**|C|2|Add immediate            |A=A+n          |
+|ADD  A, #0xn |03|**|C|2|Add immediate            |A=A+n        |
 |ADDC A, rr |78|**|A|1|Add with Carry register  |A=A+rr+C       |
 |ADDC A, @r |70|**|B|1|Add with Carry memory    |A=A+[r]+C      |
-|ADDC A, #0xn |13|**|C|2|Add with Carry immediate |A=A+n+C        |
+|ADDC A, #0xn |13|**|C|2|Add with Carry immediate |A=A+n+C      |
 |ANL  A, rr |58|--|A|1|AND Logical register     |A=A&rr         |
 |ANL  A, @r |50|--|B|1|AND Logical memory       |A=A&[r]        |
-|ANL  A, #0xn |53|--|C|2|AND Logical Immediate    |A=A&n          |
-|ANL  pp, #0xn|98|--|D|2|AND Logical I/O port     |pp=pp&n        |
+|ANL  A, #0xn |53|--|C|2|AND Logical Immediate    |A=A&n        |
+|ANL  pp, #0xn|98|--|D|2|AND Logical I/O port     |pp=pp&n      |
 |ANLD ep, A |9C|--|E|2|AND Logical expander port|ep=ep&A        |
-|CALL a    |14|--|F|2|Call subroutine          |[SP]+={PSW, PC}, |
+|CALL a    |14|--|F|2|Call subroutine          |[SP]+={PSW, PC},|
 |CLR  A    |27|--|G|1|Clear accumulator        |A=0        PC=a|
 |CLR  C    |97|0-|G|1|Clear carry status       |C=0            |
 |CLR  F0   |85|--|G|1|Clear flag #0x0            |F0=0           |
@@ -287,6 +278,7 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 |XRL  A, #0xn |D3|--|C|2|Exclusive OR immediate   |A=Axn          |
 
 ## Flags
+
 |Flag  |Short |Description |
 |:---------|:--|:-----------|
 | PSW         |-*| Flag unaffected/affected or zero (0)     |
@@ -295,7 +287,7 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 | F0   F1     |  | Flags (F0,  bit 5,  F1 bit 4)              |
 | SP          |  | Stack Pointer (Bits 0-2)                 |
 
-## Opcodes 
+## Opcodes
 |Flag  |Short |Description |
 |:---------|:--|:-----------|
 | -----nnn       |A|nnn = R0/R1/R2/R3/R4/R5/R6/R7 (3 bits)   |
