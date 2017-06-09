@@ -4,7 +4,7 @@ Adopted version from
 |Attribute    | Value           | 
 |:------------- |:-------------| 
 |Written by     |Jonathan Bowen                                 |
-|Address        |Programming Research Group                     |
+|               |Programming Research Group                     |
 |               |Oxford University Computing Laboratory         |
 |               |8-11 Keble Road                                |
 |               |Oxford OX1 3QD                                 |
@@ -13,7 +13,7 @@ Adopted version from
 |Created        |May 1983                                       |
 |Updated        |April 1985, May 2017                           |
 |Issue          |1.2                                            |
-|Copyright (C)  | J.P. Bowen 1985, changes B. Fechner           |
+|Copyright      | J.P. Bowen 1985, changes B. Fechner 2017      |
 
 
 ## CPU register usage
@@ -22,7 +22,6 @@ Adopted version from
 |:------------- |:-------------| 
 |register bank 0| normal                                                  |
 |register bank 1| interrupt processing,  serial                           |
-                                                                          |
 |F0|	1=waiting for start bit?? set at init $00D s.a.:0de, 100, 628, 63B|
 |F1|	clr at init $040 s.a.:0CC, 10A, 600, 630                          |
 
@@ -304,8 +303,10 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 | -----nnn MM    |L|nnn = as above                           |
 | -------r MM    |M|r   = as above                           |
 | ---k----       |N|k   = 0/1 (1 bit)                        |
-~~~
-|--------------------+-----------------------------------------|
+
+##Abbreviations
+|Abbreviation  | Explanation |
+|:---------|:--|
 | A                  |Accumulator (8-bit)                      |
 | BUS                |Bus I/O port (8-bit)                     |
 | OBF                |Output Buffer Full flag (1-bit)          |
@@ -318,7 +319,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 | Rn                 |Registers (8-bit,  n=0-7)                 |
 | Rn'                |Alternative Registers (8-bit,  n=0-7)     |
 | T0   T1            |Test inputs                              |
-|--------------------+-----------------------------------------|
 | a                  |11-bit address quantity (0 to 2047)      |
 | ep                 |8243 expander port P4,  P5,  P6 or P7      |
 | k                  |1-bit data quantity (0 or 1)             |
@@ -328,7 +328,6 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 | pp                 |I/O port PORT,  P1 or P2                  |
 | r                  |Register R0 or R1                        |
 | rr                 |Register R0,  R1,  R2,  R3,  R4,  R5,  R6 or R7|
-|--------------------+-----------------------------------------|
 | +    -             |Arithmetic addition/subtraction          |
 | &    ~             |Logical AND/NOT                          |
 | v    x             |Logical inclusive/exclusive OR           |
@@ -338,10 +337,11 @@ SER1CTS (DTE) is output,  SER2DTR (DCE) is output. See QLUG,  concepts p13/14.
 | [ ]                |Indirect addressing                      |
 | [ ]+ -[ ]          |Indirect address auto-increment/decrement|
 | { }                |Combination of operands                  |
-|--------------------+-----------------------------------------|
+
+## Registers and Memory
+|Address  | Explanation |
+|:---------|:--|
 | 00H to 07H         |General purpose registers R0-R7 (8-bit)  |
 | 08H to 17H         |Stack area S0-S7 (16-bit)                |
 | 18H to 1FH         |Alternative registers R0'-R7' (8-bit)    |
 | 20H to 3FH         |General scratchpad memory area           |
-----------------------------------------------------------------
-~~~
